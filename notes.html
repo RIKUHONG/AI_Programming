@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>课程笔记 | 南京大学软件学院</title>
+    <!-- Tailwind CSS v3 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <!-- AOS Animation Library -->
+    <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    
+    <!-- Tailwind Configuration -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#5A189A', // 南京大学京大学紫色
+                        secondary: '#7B2CBF',
+                        accent: '#9D4EDD',
+                        light: '#F8F9FA',
+                        dark: '#212529'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'custom': '0 4px 20px rgba(0, 0, 0, 0.1)',
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .text-shadow {
+                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            }
+            .bg-blur {
+                backdrop-filter: blur(8px);
+            }
+            .transition-all-300 {
+                transition: all 0.3s ease;
+            }
+        }
+        
+        /* Custom Styles */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        .nav-link {
+            position: relative;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -2px;
+            left: 0;
+            background-color: #5A189A;
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after,
+        .nav-link.active::after {
+            width: 100%;
+        }
+        
+        .social-icon {
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+        
+        .social-icon:hover {
+            transform: translateY(-3px);
+            color: #5A189A;
+        }
+        
+        /* Dark Mode Styles */
+        .dark-mode {
+            background-color: #1a1a2e;
+            color: #f1f1f1;
+        }
+        
+        .dark-mode .bg-white {
+            background-color: #252542;
+        }
+        
+        .dark-mode .text-gray-800 {
+            color: #f1f1f1;
+        }
+        
+        .dark-mode .border-gray-200 {
+            border-color: #3a3a5a;
+        }
+        
+        .dark-mode .shadow-custom {
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+    <!-- Navigation -->
+    <nav id="navbar" class="fixed top-0 left-0 w-full bg-white bg-opacity-90 bg-blur z-50 shadow-md-md transition-all duration-300">
+        <div class="container mx-auto px-4 py-3 flex justify justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <img src="https://p11-doubao-search-sign.byteimg.com/labis/57be92846f73fefdb185e5013432f452~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1777116047&x-signature=dAZq3Xe4j2zfhm7oaXuiDX9Z0qs%3D" alt="南京大学京大学软件学院" class="h-10 w-10">
+                <span class="text-xl font-bold text-primary">NJU Software</span>
+            </div>
+            
+            <!-- Desktop Navigation -->
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="index.html" class="nav-link text-gray-800 hover:text-primary font-medium">首页</a>
+                <a href="articles.html" class="nav-link text-gray-800 hover:text-primary font-medium">我的文章</a>
+                <a href="resume.html" class="nav-link text-gray-800 hover:text-primary font-medium">个人履历</a>
+                <a href="notes.html" class="nav-link active text-gray-800 hover:text-primary font-medium">课程笔记</a>
+                <a href="social.html" class="nav-link text-gray-800 hover:text-primary font-medium">社交链接</a>
+            </div>
+            
+            <!-- Mobile Navigation Toggle -->
+            <div class="md:hidden">
+                <button id="mobile-menu-button" class="text-gray-800 hover:text-primary focus:outline-none">
+                    <i class="fa fa-bars text-xl"></i>
+                </button>
+            </div>
+            
+            <!-- Dark Mode Toggle -->
+            <button id="dark-mode-toggle" class="hidden md:block text-gray-800 hover:text-primary focus:outline-none">
+                <i class="fa fa-moon-o text-xl"></i>
+            </button>
+        </div>
+        
+        <!-- Mobile Navigation Menu -->
+        <div id="mobile-menu" class="md:hidden hidden bg-white shadow-lg absolute w-full">
+            <div class="container mx-auto px-4 py-3 flex flex-col space-y-3">
+                <a href="index.html" class="mobile-nav-link text-gray-800 hover:text-primary font-medium py-2">首页</a>
+                <a href="articles.html" class="mobile-nav-link text-gray-800 hover:text-primary font-medium py-2">我的文章</a>
+                <a href="resume.html" class="mobile-nav-link text-gray-800 hover:text-primary font-medium py-2">个人履历</a>
+                <a href="notes.html" class="mobile-nav-link text-gray-800 hover:text-primary font-medium py-2">课程笔记</a>
+                <a href="social.html" class="mobile-nav-link text-gray-800 hover:text-primary font-medium py-2">社交链接</a>
+                <button id="mobile-dark-mode-toggle" class="text-gray-800 hover:text-primary focus:outline-none py-2">
+                    <i class="fa fa-moon-o mr-2"></i> 切换深色模式
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Course Notes Section -->
+    <section id="notes" class="py-20 bg-white pt-32">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12" data-aos="fade-up">
+                <h2 class="text-3xl font-bold text-primary mb-4">课程笔记</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">整理的课程学习笔记和资料，希望能帮助到更多同学</p>
+            </div>
+            
+            <!-- Notes Categories -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+                <div class="bg-white rounded-xl shadow-customustom p-6 border border-gray-100" data-aos="fade-up">
+                    <div class="w-14 h-14 rounded-full bg-primary bg-opacity-10 flex items items-center justify-center text-primary mb-4">
+                        <i class="fa fa-laptop text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-3">计算机科学基础</h3>
+                    <p class="text-gray-600 mb-4">包括数据结构、算法、计算机组成原理等基础课程的学习笔记</p>
+                    <button class="notes-category-btn text-primary hover:text:text-secondary font-medium flex items-center" data-category="basic">
+                        查看笔记 <i class="fa fa-arrow-right ml-2"></i>
+                    </button>
+                </div>
+                
+                <div class="bg-white rounded-xl shadow shadow-custom p-6 border border-gray-100" data-aos="fade-up" data-aos-delay="100">
+                    <div class="w-14 h-14 rounded-full bg-primary bg-opacity-10 flex items-center justify-center justify-center text-primary mb-4">
+                        <i class="fa fa-cogs text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-3">系统与网络</h3>
+                    <p class="text-gray-600 mb-4">包括操作系统、计算机网络、分布式系统等课程的学习笔记</p>
+                    <button class="notes-category-btn text-primary hover:text-secondary font-medium flex items-center" data-category="system">
+                        查看笔记 <i class="fa fa-arrow-right ml-2"></i>
+                    </button>
+                </div>
+                
+                <div class="bg-white rounded-xl shadow-custom p-6 border border-gray-100" data-aos="fade-up" data-aos-delay="200">
+                    <div class="w-14 h-14 rounded-full bg-primary bg-opacity-10 flex items-center justify-center text-primary mb-4">
+                        <i class="fa fa-brain text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-3">人工智能与数据科学</h3>
+                    <p class="text-gray-600 mb-4">包括人工智能、机器学习、数据挖掘等课程的学习笔记</p>
+                    <button class="notes-category-btn text-primary hover:text-secondary font-medium flex items-center" data-category="ai">
+                        查看笔记 <i class="fa fa-arrow-right ml-2"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Notes Content -->
+            <div class="bg-white rounded-xl shadow-custom p-6 border border-gray-100" data-aos="fade-up">
+                <div id="notes-content" class="notes-content">
+                    <div class="text-center py-12">
+                        <i class="fa fa-book text-5xl text-gray-300 mb-4"></i>
+                        <p class="text-gray-500">请选择一个课程分类查看笔记</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-primary text-white py-10">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-6 md:mb-0">
+                    <div class="flex items-center space-x-2">
+                        <img src="https://p11-doubao-search-sign.byteimg.com/labis/57be92846f73fefdb185e5013432f452~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1777116047&x-signature=dAZq3Xe4j2zfhm7oaXuiDX9Z0qs%3D" alt="南京大学软件学院" class="h-10 w-10">
+                        <span class="text-xl font-bold">NJU Software</span>
+                    </div>
+                    <p class="mt-2 text-gray-300">南京大学软件学院学生博客</p>
+                </div>
+                
+                <div class="flex space-x-6">
+                    <a href="#" class="social-icon text-white hover:text-gray-300">
+                        <i class="fa fa-github text-2xl"></i>
+                    </a>
+                    <a href="#" class="social-icon text-white hover:text-gray-300">
+                        <i class="fa fa-linkedin text-2xl"></i>
+                    </a>
+                    <a href="#" class="social-icon text-white hover:text-gray-300">
+                        <i class="fa fa-envelope text-2xl"></i>
+                    </a>
+                    <a href="#" class="social-icon text-white hover:text-gray-300">
+                        <i class="fa fa-weixin text-2xl"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <hr class="border-gray-700 my-8">
+            
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-300 text-sm">© 2025 南京大学软件学院. 保留所有权利.</p>
+                <div class="mt-4 md:mt-0">
+                    <a href="#" class="text-gray-300 hover:text-white text-sm mx-2">隐私政策</a>
+                    <a href="#" class="text-gray-300 hover:text-white text-sm mx-2">使用条款</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button id="back-to-top" class="fixed bottom-8 right-8 bg-primary text-white w-12 h-12 rounded-full flex items-center justify-center shadow-lg opacity-0 invisible transition-all duration-300">
+        <i class="fa fa-arrow-up"></i>
+    </button>
+
+    <!-- JavaScript -->
+    <script>
+        // Initialize AOS Animation Library
+        document.addEventListener('DOMContentLoaded', function() {
+            AOS.init({
+                duration: 800,
+                easing: 'ease-in-out',
+                once: true
+            });
+            
+            // Sample data for course notes
+            const courseNotes = {
+                basic: [
+                    {
+                        title: '数据结构与算法',
+                        description: '详细的课程笔记，包括链表、栈、队列、树、图等数据结构和各种排序、查找算法的实现与分析。',
+                        files: ['数据结构与算法课件.pdf', '算法实现代码.zip', '课后习题答案.md']
+                    },
+                    {
+                        title: '计算机组成原理',
+                        description: '计算机硬件系统的基本组成和工作原理，包括CPU、存储器、输入输出系统等内容的学习笔记。',
+                        files: ['计算机组成原理课件.pdf', '实验报告模板.docx', '复习要点.md']
+                    }
+                ],
+                system: [
+                    {
+                        title: '操作系统',
+                        description: '操作系统的基本概念、进程管理、内存管理、文件系统和设备管理等内容的学习笔记。',
+                        files: ['操作系统课件.pdf', '实验指导书.docx', '模拟试题及答案.md']
+                    },
+                    {
+                        title: '计算机网络',
+                        description: '计算机网络的基本原理和协议，包括TCP/IP协议栈、HTTP、DNS等常用协议的学习笔记。',
+                        files: ['计算机网络课件.pdf', 'Wireshark实验指导.md', '网络编程示例代码.zip']
+                    }
+                ],
+                ai: [
+                    {
+                        title: '人工智能导论',
+                        description: '人工智能的基本概念、方法和应用，包括搜索算法、知识表示、机器学习等内容的学习笔记。',
+                        files: ['人工智能导论课件.pdf', 'Python实现示例代码.zip', '课程论文模板.docx']
+                    },
+                    {
+                        title: '机器学习',
+                        description: '机器学习的基本原理和算法，包括监督学习、无监督学习、深度学习等内容的学习笔记。',
+                        files: ['机器学习课件.pdf', 'Scikit-learn实战教程.ipynb', '课程项目报告模板.docx']
+                    }
+                ]
+            };
+            
+            // Course notes functionality
+            document.querySelectorAll('.notes-category-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const category = this.getAttribute('data-category');
+                    const notes = courseNotes[category];
+                    
+                    if (!notes) return;
+                    
+                    const notesContent = document.getElementById('notes-content');
+                    notesContent.innerHTML = '';
+                    
+                    notes.forEach(note => {
+                        const noteItem = document.createElement('div');
+                        noteItem.className = 'mb-6 pb-6 border-b border-gray-100';
+                        
+                        let filesHtml = '';
+                        note.files.forEach(file => {
+                            filesHtml += `
+                                <a href="#" class="flex items-center text-primary hover:text-secondary mb-2">
+                                    <i class="fa fa-file-o mr-2"></i> ${file}
+                                </a>
+                            `;
+                        });
+                        
+                        noteItem.innerHTML = `
+                            <h3 class="text-xl font-bold text-gray-800 mb-3">${note.title}</h3>
+                            <p class="text-gray-600 mb-4">${note.description}</p>
+                            <div class="mt-4">
+                                <p class="font-medium text-gray-700 mb-2">相关文件:</p>
+                                <div class="pl-2">
+                                    ${filesHtml}
+                                </div>
+                            </div>
+                        `;
+                        
+                        notesContent.appendChild(noteItem);
+                    });
+                    
+                    // Remove last border
+                    const lastItem = notesContent.lastElementChild;
+                    if (lastItem) {
+                        lastItem.classList.remove('border-b', 'border-gray-100', 'pb-6');
+                    }
+                });
+            });
+            
+            // Mobile menu toggle
+            document.getElementById('mobile-menu-button').addEventListener('click', function() {
+                const mobileMenu = document.getElementById('mobile-menu');
+                mobileMenu.classList.toggle('hidden');
+            });
+            
+            // Mobile nav links
+            document.querySelectorAll('.mobile-nav-link').forEach(link => {
+                link.addEventListener('click', function() {
+                    document.getElementById('mobile-menu').classList.add('hidden');
+                });
+            });
+            
+            // Dark mode toggle
+            const darkModeToggle = document.getElementById('dark-mode-toggle');
+            const mobileDarkModeToggle = document.getElementById('mobile-dark-mode-toggle');
+            
+            function toggleDarkMode() {
+                document.body.classList.toggle('dark-mode');
+                
+                const isDarkMode = document.body.classList.contains('dark-mode');
+                
+                if (isDarkMode) {
+                    darkModeToggle.innerHTML = '<i class="fa fa-sun-o text-xl"></i>';
+                    mobileDarkModeToggle.innerHTML = '<i class="fa fa-sun-o mr-2"></i> 切换浅色模式';
+                    localStorage.setItem('darkMode', 'enabled');
+                } else {
+                    darkModeToggle.innerHTML = '<i class="fa fa-moon-o text-xl"></i>';
+                    mobileDarkModeToggle.innerHTML = '<i class="fa fa-moon-o mr-2"></i> 切换深色模式';
+                    localStorage.setItem('darkMode', 'disabled');
+                }
+            }
+            
+            darkModeToggle.addEventListener('click', toggleDarkMode);
+            mobileDarkModeToggle.addEventListener('click', toggleDarkMode);
+            
+            // Check for saved dark mode preference
+            if (localStorage.getItem('darkMode') === 'enabled') {
+                toggleDarkMode();
+            }
+            
+            // Navbar scroll effect
+            window.addEventListener('scroll', function() {
+                const navbar = document.getElementById('navbar');
+                const backToTop = document.getElementById('back-to-top');
+                
+                if (window.scrollY > 50) {
+                    navbar.classList.add('py-2', 'shadow-lg');
+                    navbar.classList.remove('py-3', 'shadow-md');
+                    
+                    backToTop.classList.remove('opacity-0', 'invisible');
+                    backToTop.classList.add('opacity-100', 'visible');
+                } else {
+                    navbar.classList.add('py-3', 'shadow-md');
+                    navbar.classList.remove('py-2', 'shadow-lg');
+                    
+                    backToTop.classList.add('opacity-0', 'invisible');
+                    backToTop.classList.remove('opacity-100', 'visible');
+                }
+            });
+            
+            // Back to top button
+            document.getElementById('back-to-top').addEventListener('click', function() {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>

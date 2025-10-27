@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的文章 | 南京大学软件学院</title>
+    <!-- Tailwind CSS v3 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <!-- AOS Animation Library -->
+    <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    
+    <!-- Tailwind Configuration -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#5A189A', // 南京大学京大学紫色
+                        secondary: '#7B2CBF',
+                        accent: '#9D4EDD',
+                        light: '#F8F9FA',
+                        dark: '#212529'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'custom': '0 4px 20px rgba(0, 0, 0, 0.1)',
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .text-shadow {
+                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            }
+            .bg-blur {
+                backdrop-filter: blur(8px);
+            }
+            .transition-all-300 {
+                transition: all 0.3s ease;
+            }
+        }
+        
+        /* Custom Styles */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        .nav-link {
+            position: relative;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -2px;
+            left: 0;
+            background-color: #5A189A;
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after,
+        .nav-link.active::after {
+            width: 100%;
+        }
+        
+        .card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .social-icon {
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+        
+        .social-icon:hover {
+            transform: translateY(-3px);
+            color: #5A189A;
+        }
+        
+        /* Dark Mode Styles */
+        .dark-mode {
+            background-color: #1a1a2e;
+            color: #f1f1f1;
+        }
+        
+        .dark-mode .bg-white {
+            background-color: #252542;
+        }
+        
+        .dark-mode .text-gray-800 {
+            color: #f1f1f1;
+        }
+        
+        .dark-mode .border-gray-200 {
+            border-color: #3a3a5a;
+        }
+        
+        .dark-mode .shadow-custom {
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+    <!-- Navigation -->
+    <nav id="navbar" class="fixed top-0 left-0 w-full bg-white bg-opacity-90 bg-blur z-50 shadow-md transition-all duration-300">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <img src="https://p11-doubao-search-sign.byteimg.com/labis/57be92846f73fefdb185e5013432f452~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1777116047&x-signature=dAZq3Xe4j2zfhm7oaXuiDX9Z0qs%3D" alt="南京大学京大学软件学院" class="h-10 w-10">
+                <span class="text-xl font-bold text-primary">NJU Software</span>
+            </div>
+            
+            <!-- Desktop Navigation -->
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="index.html" class="nav-link text-gray-800 hover:text-primary font-medium">首页</a>
+                <a href="articles.html" class="nav-link active text-gray-800 hover:text-primary font-medium">我的文章</a>
+                <a href="resume.html" class="nav-link text-gray-800 hover:text-primary font-medium">个人履历</a>
+                <a href="notes.html" class="nav-link text-gray-800 hover:text-primary font-medium">课程笔记</a>
+                <a href="social.html" class="nav-link text-gray-800 hover:text-primary font-medium">社交链接</a>
+            </div>
+            
+            <!-- Mobile Navigation Toggle -->
+            <div class="md:hidden">
+                <button id="mobile-menu-button" class="text-gray-800 hover:text-primary focus:outline-none">
+                    <i class="fa fa-bars text-xl"></i>
+                </button>
+            </div>
+            
+            <!-- Dark Mode Toggle -->
+            <button id="dark-mode-toggle" class="hidden md:block text-gray-800 hover:text-primary focus:outline-none">
+                <i class="fa fa-moon-o text-xl"></i>
+            </button>
+        </div>
+        
+        <!-- Mobile Navigation Menu -->
+        <div id="mobile-menu" class="md:hidden hidden bg-white shadow-lg absolute w-full">
+            <div class="container mx-auto px-4 py-3 flex flex-col space-y-3">
+                <a href="index.html" class="mobile-nav-link text-gray-800 hover:text-primary font-medium py-2">首页</a>
+                <a href="articles.html" class="mobile-nav-link text-gray-800 hover:text-primary font-medium py-2">我的文章</a>
+                <a href="resume.html" class="mobile-nav-link text-gray-800 hover:text-primary font-medium py-2">个人履历</a>
+                <a href="notes.html" class="mobile-nav-link text-gray-800 hover:text-primary font-medium py-2">课程笔记</a>
+                <a href="social.html" class="mobile-nav-link text-gray-800 hover:text-primary font-medium py-2">社交链接</a>
+                <button id="mobile-dark-mode-toggle" class="text-gray-800 hover:text-primary focus:outline-none py-2">
+                    <i class="fa fa-moon-o mr-2"></i> 切换深色模式
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Articles Section -->
+    <section id="articles" class="py-20 bg-white pt-32">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12" data-aos="fade-up">
+                <h2 class="text-3xl font-bold text-primary mb-4">我的文章</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">分享我在学习和实践过程中的心得体会、技术见解和项目经验</p>
+            </div>
+            
+            <!-- Article Filter -->
+            <div class="flex flex-wrap justify-center gap-4 mb-10" data-aos="fade-up" data-aos-delay="100">
+                <button class="article-filter-btn active bg-primary text-white px-4 py-2 rounded-full font-medium transition-all duration-300" data-category="all">全部</button>
+                <button class="article-filter-btn bg-gray-200 text-gray-700 hover:bg-primary hover:text-white px-4 py-2 rounded-full font-medium transition-all duration-300" data-category="tech">技术</button>
+                <button class="article-filter-btn bg-gray-200 text-gray-700 hover:bg-primary hover:text-white px-4 py-2 rounded-full font-medium transition-all duration-300" data-category="life">生活</button>
+                <button class="article-filter-btn bg-gray-200 text-gray-700 hover:bg-primary hover:text-white px-4 py-2 rounded-full font-medium transition-all duration-300" data-category="study">学习</button>
+            </div>
+            
+            <!-- Search Box -->
+            <div class="max-w-md mx-auto mb-10" data-aos="fade-up" data-aos-delay="200">
+                <div class="relative">
+                    <input type="text" id="article-search" placeholder="搜索文章..." class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                    <button id="search-btn" class="absolute right-3 top-3 text-gray-400 hover:text-primary">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Articles Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="articles-container">
+                <!-- Articles will be dynamically inserted here -->
+            </div>
+            
+            <!-- Pagination -->
+            <div class="flex justify-center mt-12" data-aos="fade-up">
+                <div class="flex space-x-2">
+                    <button class="pagination-btn px-4 py-2 rounded-lg border border-gray-300 text-gray-600 hover:bg-primary hover:text-white hover:border-primary transition-all duration-300" data-page="prev">
+                        <i class="fa fa-angle-left"></i>
+                    </button>
+                    <button class="pagination-btn px-4 py-2 rounded-lg bg-primary text-white border border-primary" data-page="1">1</button>
+                    <button class="pagination-btn px-4 py-2 rounded-lg border border-gray-300 text-gray-600 hover:bg-primary hover:text-white hover:border-primary transition-all duration-300" data-page="2">2</button>
+                    <button class="pagination-btn px-4 py-2 rounded-lg border border-gray-300 text-gray-600 hover:bg-primary hover:text-white hover:border-primary transition-all duration-300" data-page="3">3</button>
+                    <button class="pagination-btn px-4 py-2 rounded-lg border border-gray-300 text-gray-600 hover:bg-primary hover:text-white hover:border-primary transition-all duration-300" data-page="next">
+                        <i class="fa fa-angle-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-primary text-white py-10">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-6 md:mb-0">
+                    <div class="flex items-center space-x-2">
+                        <img src="https://p11-doubao-search-sign.byteimg.com/labis/57be92846f73fefdb185e5013432f452~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1777116047&x-signature=dAZq3Xe4j2zfhm7oaXuiDX9Z0qs%3D" alt="南京大学软件学院" class="h-10 w-10">
+                        <span class="text-xl font-bold">NJU Software</span>
+                    </div>
+                    <p class="mt-2 text-gray-300">南京大学软件学院学生博客</p>
+                </div>
+                
+                <div class="flex space-x-6">
+                    <a href="#" class="social-icon text-white hover:text-gray-300">
+                        <i class="fa fa-github text-2xl"></i>
+                    </a>
+                    <a href="#" class="social-icon text-white hover:text-gray-300">
+                        <i class="fa fa-linkedin text-2xl"></i>
+                    </a>
+                    <a href="#" class="social-icon text-white hover:text-gray-300">
+                        <i class="fa fa-envelope text-2xl"></i>
+                    </a>
+                    <a href="#" class="social-icon text-white hover:text-gray-300">
+                        <i class="fa fa-weixin text-2xl"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <hr class="border-gray-700 my-8">
+            
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-300 text-sm">© 2025 南京大学软件学院. 保留所有权利.</p>
+                <div class="mt-4 md:mt-0">
+                    <a href="#" class="text-gray-300 hover:text-white text-sm mx-2">隐私政策</a>
+                    <a href="#" class="text-gray-300 hover:text-white text-sm mx-2">使用条款</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button id="back-to-top" class="fixed bottom-8 right-8 bg-primary text-white w-12 h-12 rounded-full flex items-center justify-center shadow-lg opacity-0 invisible transition-all duration-300">
+        <i class="fa fa-arrow-up"></i>
+    </button>
+
+    <!-- JavaScript -->
+    <script>
+        // Initialize AOS Animation Library
+        document.addEventListener('DOMContentLoaded', function() {
+            AOS.init({
+                duration: 800,
+                easing: 'ease-in-out',
+                once: true
+            });
+            
+            // Sample data for articles
+            const articles = [
+                {
+                    id: 1,
+                    title: '深度学习在计算机视觉中的应用',
+                    category: 'tech',
+                    date: '2023-06-15',
+                    summary: '本文探讨了深度学习技术在计算机视觉领域的最新应用，包括目标检测、图像分割和人脸识别等方向。',
+                    image: 'https://p3-doubao-search-sign.byteimg.com/tos-cn-i-be4g95zd3a/1688198665930932234~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1777116046&x-signature=C4WIrdlLmxd%2BchtA%2BusrM68U5og%3D',
+                    readCount: 245
+                },
+                {
+                    id: 2,
+                    title: '南京大学软件学院学习生活记录',
+                    category: 'life',
+                    date: '2023-05-20',
+                    summary: '记录我在南京大学软件学院的学习生活，分享校园风光、学习氛围和丰富多彩的校园活动。',
+                    image: 'https://p11-doubao-search-sign.byteimg.com/tos-cn-i-be4g95zd3a/1688198683134918661~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1777116046&x-signature=Nats0IE0dM0CdhD5sYqitYzCAvw%3D',
+                    readCount: 189
+                },
+                {
+                    id: 3,
+                    title: '数据结构与算法学习笔记',
+                    category: 'study',
+                    date: '2023-04-10',
+                    summary: '整理了数据结构与算法课程的学习笔记，包括常见的数据结构、排序算法和查找算法的实现与分析。',
+                    image: 'https://p3-doubao-search-sign.byteimg.com/tos-cn-i-be4g95zd3a/1484880076683477005~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1777116046&x-signature=lewWziugdMk36wNwFPHkhxt7OFA%3D',
+                    readCount: 320
+                },
+                {
+                    id: 4,
+                    title: 'Python机器学习实战指南',
+                    category: 'tech',
+                    date: '2023-03-25',
+                    summary: '通过实际案例讲解Python机器学习库的使用，包括Scikit-learn、TensorFlow和PyTorch等框架的应用。',
+                    image: 'https://p3-doubao-search-sign.byteimg.com/tos-cn-i-be4g95zd3a/1267738264135401479~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1777116046&x-signature=94Accm1ouUxJjXWxrbDA4gHULjg%3D',
+                    readCount: 278
+                },
+                {
+                    id: 5,
+                    title: '校园编程竞赛经验分享',
+                    category: 'life',
+                    date: '2023-02-18',
+                    summary: '分享我参加各类编程竞赛的经验和心得，包括比赛准备、心态调整和团队协作等方面的体会。',
+                    image: 'https://p3-doubao-search-sign.byteimg.com/tos-cn-i-be4g95zd3a/1481129960451211282~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1777116046&x-signature=kvmlDbMGaeJVNIXx4%2FlLIfPfEFU%3D',
+                    readCount: 156
+                },
+                {
+                    id: 6,
+                    title: '数据库系统原理学习总结',
+                    category: 'study',
+                    date: '2023-01-30',
+                    summary: '总结数据库系统原理课程的核心知识点，包括关系代数、SQL语言、数据库设计和事务管理等内容。',
+                    image: 'https://p11-doubao-search-sign.byteimg.com/labis/792d72264f2bb0ec9030248af0969c20~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1777116046&x-signature=dBhG9GmanM8J%2B3yNCp9764X%2B8PI%3D',
+                    readCount: 210
+                },
+                {
+                    id: 7,
+                    title: 'Flutter跨平台移动应用开发实践',
+                    category: 'tech',
+                    date: '2023-07-10',
+                    summary: '介绍Flutter框架的特点和优势，通过实际项目案例讲解如何使用Flutter开发跨平台移动应用。',
+                    image: 'https://p3-doubao-search-sign.byteimg.com/tos-cn-i-be4g95zd3a/1481129960451211282~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1777116046&x-signature=kvmlDbMGaeJVNIXx4%2FlLIfPfEFU%3D',
+                    readCount: 198
+                },
+                {
+                    id: 8,
+                    title: '暑期实习经历分享',
+                    category: 'life',
+                    date: '2023-08-25',
+                    summary: '分享我在知名科技公司的暑期实习经历，包括面试准备、工作内容和职业发展的思考。',
+                    image: 'https://p3-doubao-search-sign.byteimg.com/tos-cn-i-be4g95zd3a/1688198683134918661~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1777116046&x-signature=Nats0IE0dM0CdhD5sYqitYzCAvw%3D',
+                    readCount: 235
+                },
+                {
+                    id: 9,
+                    title: '深度学习模型优化技术',
+                    category: 'study',
+                    date: '2023-09-05',
+                    summary: '探讨深度学习模型的优化技术，包括模型压缩、量化、剪枝和蒸馏等方法，以及在实际项目中的应用。',
+                    image: 'https://p3-doubao-search-sign.byteimg.com/tos-cn-i-be4g95zd3a/1688198665930932234~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1777116046&x-signature=C4WIrdlLmxd%2BchtA%2BusrM68U5og%3D',
+                    readCount: 187
+                }
+            ];
+            
+            // Render articles
+            function renderArticles(filteredArticles = articles) {
+                const articlesContainer = document.getElementById('articles-container');
+                articlesContainer.innerHTML = '';
+                
+                if (filteredArticles.length === 0) {
+                    articlesContainer.innerHTML = `
+                        <div class="col-span-full text-center py-12">
+                            <i class="fa fa-search text-5xl text-gray-300 mb-4"></i>
+                            <p class="text-gray-500">没有找到匹配的文章</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                filteredArticles.forEach(article => {
+                    const articleCard = document.createElement('div');
+                    articleCard.className = 'bg-white rounded-xl shadow-custom overflow-hidden border border-gray-100 card';
+                    articleCard.setAttribute('data-aos', 'fade-up');
+                    
+                    articleCard.innerHTML = `
+                        <div class="h-48 overflow-hidden">
+                            <img src="${article.image}" alt="${article.title}" class="w-full h-full object-cover">
+                        </div>
+                        <div class="p-6">
+                            <div class="flex justify-between items-center mb-3">
+                                <span class="bg-primary bg-opacity-10 text-primary text-sm font-medium px-3 py-1 rounded-full">${getCategoryName(article.category)}</span>
+                                <span class="text-gray-500 text-sm">${article.date}</span>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-800 mb-2">${article.title}</h3>
+                            <p class="text-gray-600 mb-4">${article.summary}</p>
+                            <div class="flex justify-between items-center">
+                                <button class="read-more-btn text-primary hover:text-secondary font-medium flex items-center" data-id="${article.id}">
+                                    阅读更多 <i class="fa fa-arrow-right ml-2"></i>
+                                </button>
+                                <span class="text-gray-500 text-sm flex items-center">
+                                    <i class="fa fa-eye mr-1"></i> ${article.readCount}
+                                </span>
+                            </div>
+                        </div>
+                    `;
+                    
+                    articlesContainer.appendChild(articleCard);
+                });
+                
+                // Add event listeners to read more buttons
+                document.querySelectorAll('.read-more-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const articleId = parseInt(this.getAttribute('data-id'));
+                        const article = articles.find(a => a.id === articleId);
+                        
+                        if (article) {
+                            // Show article detail modal (simplified for demo)
+                            alert(`您正在阅读: ${article.title}\n\n本文内容将在实际应用中加载...`);
+                            
+                            // Update read count (simulated)
+                            article.readCount++;
+                            this.parentElement.querySelector('.text-gray-500').innerHTML = `<i class="fa fa-eye mr-1"></i> ${article.readCount}`;
+                        }
+                    });
+                });
+            }
+            
+            // Helper function to get category name
+            function getCategoryName(category) {
+                const categories = {
+                    'tech': '技术',
+                    'life': '生活',
+                    'study': '学习'
+                };
+                return categories[category] || category;
+            }
+            
+            // Initial render of articles
+            renderArticles();
+            
+            // Article filter functionality
+            document.querySelectorAll('.article-filter-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    // Update active state
+                    document.querySelectorAll('.article-filter-btn').forEach(b => {
+                        b.classList.remove('active', 'bg-primary', 'text-white');
+                        b.classList.add('bg-gray-200', 'text-gray-700');
+                    });
+                    this.classList.add('active', 'bg-primary', 'text-white');
+                    this.classList.remove('bg-gray-200', 'text-gray-700');
+                    
+                    const category = this.getAttribute('data-category');
+                    let filteredArticles = articles;
+                    
+                    if (category !== 'all') {
+                        filteredArticles = articles.filter(article => article.category === category);
+                    }
+                    
+                    renderArticles(filteredArticles);
+                });
+            });
+            
+            // Article search functionality
+            document.getElementById('search-btn').addEventListener('click', function() {
+                const searchTerm = document.getElementById('article-search').value.toLowerCase().trim();
+                
+                if (searchTerm === '') {
+                    renderArticles();
+                    return;
+                }
+                
+                const filteredArticles = articles.filter(article => 
+                    article.title.toLowerCase().includes(searchTerm) || 
+                    article.summary.toLowerCase().includes(searchTerm)
+                );
+                
+                renderArticles(filteredArticles);
+            });
+            
+            // Enter key for search
+            document.getElementById('article-search').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    document.getElementById('search-btn').click();
+                }
+            });
+            
+            // Pagination functionality
+            document.querySelectorAll('.pagination-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const page = this.getAttribute('data-page');
+                    
+                    // Update active state
+                    document.querySelectorAll('.pagination-btn').forEach(b => {
+                        b.classList.remove('bg-primary', 'text-white', 'border-primary');
+                        b.classList.add('border-gray-300', 'text-gray-600');
+                    });
+                    
+                    // For demo purposes, we'll just simulate pagination
+                    if (page === 'prev' || page === 'next') {
+                        // In a real app, you would handle actual pagination logic
+                        alert('分页功能将在实际应用中实现');
+                    } else {
+                        this.classList.add('bg-primary', 'text-white', 'border-primary');
+                        this.classList.remove('border-gray-300', 'text-gray-600');
+                        
+                        // In a real app, you would load the corresponding page of articles
+                        alert(`正在加载第 ${page} 页文章`);
+                    }
+                });
+            });
+            
+            // Mobile menu toggle
+            document.getElementById('mobile-menu-button').addEventListener('click', function() {
+                const mobileMenu = document.getElementById('mobile-menu');
+                mobileMenu.classList.toggle('hidden');
+            });
+            
+            // Mobile nav links
+            document.querySelectorAll('.mobile-nav-link').forEach(link => {
+                link.addEventListener('click', function() {
+                    document.getElementById('mobile-menu').classList.add('hidden');
+                });
+            });
+            
+            // Dark mode toggle
+            const darkModeToggle = document.getElementById('dark-mode-toggle');
+            const mobileDarkModeToggle = document.getElementById('mobile-dark-mode-toggle');
+            
+            function toggleDarkMode() {
+                document.body.classList.toggle('dark-mode');
+                
+                const isDarkMode = document.body.classList.contains('dark-mode');
+                
+                if (isDarkMode) {
+                    darkModeToggle.innerHTML = '<i class="fa fa-sun-o text-xl"></i>';
+                    mobileDarkModeToggle.innerHTML = '<i class="fa fa-sun-o mr-2"></i> 切换浅色模式';
+                    localStorage.setItem('darkMode', 'enabled');
+                } else {
+                    darkModeToggle.innerHTML = '<i class="fa fa-moon-o text-xl"></i>';
+                    mobileDarkModeToggle.innerHTML = '<i class="fa fa-moon-o mr-2"></i> 切换深色模式';
+                    localStorage.setItem('darkMode', 'disabled');
+                }
+            }
+            
+            darkModeToggle.addEventListener('click', toggleDarkMode);
+            mobileDarkModeToggle.addEventListener('click', toggleDarkMode);
+            
+            // Check for saved dark mode preference
+            if (localStorage.getItem('darkMode') === 'enabled') {
+                toggleDarkMode();
+            }
+            
+            // Navbar scroll effect
+            window.addEventListener('scroll', function() {
+                const navbar = document.getElementById('navbar');
+                const backToTop = document.getElementById('back-to-top');
+                
+                if (window.scrollY > 50) {
+                    navbar.classList.add('py-2', 'shadow-lg');
+                    navbar.classList.remove('py-3', 'shadow-md');
+                    
+                    backToTop.classList.remove('opacity-0', 'invisible');
+                    backToTop.classList.add('opacity-100', 'visible');
+                } else {
+                    navbar.classList.add('py-3', 'shadow-md');
+                    navbar.classList.remove('py-2', 'shadow-lg');
+                    
+                    backToTop.classList.add('opacity-0', 'invisible');
+                    backToTop.classList.remove('opacity-100', 'visible');
+                }
+            });
+            
+            // Back to top button
+            document.getElementById('back-to-top').addEventListener('click', function() {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
